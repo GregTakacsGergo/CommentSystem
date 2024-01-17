@@ -1,3 +1,6 @@
+/*Update: - using bootstrap 5.3.2 instead of 4.3.2 bootstrap 
+          - bugfixes (comment send event was duplicating the sent comments)*/
+
 <?php
 session_start();
 
@@ -7,7 +10,7 @@ session_start();
         $loggedIn = true;
     }
 
-    $conn = new mysqli('localhost', 'root', '', 'R34StyleCommentSystem_db');
+    $conn = new mysqli('localhost', 'root', '', 'CommentSystem_db');
 
     if (isset($_POST['addComment'])) {
       $comment = $conn->real_escape_string($_POST['comment']);
@@ -34,7 +37,7 @@ session_start();
        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>R34Style Comment System</title>
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
    <style>
     .user {
          font-weight: bold;
@@ -87,21 +90,21 @@ session_start();
                   <div class="replies">   
                      <div class="comment">
                         <div class="user">Mac Adam
-                           <img class="user-img" src="niga.jpg" align="left" alt="User Image">
+                           <img class="user-img" src="pickard.jpg" align="left" alt="User Image">
                            <span class="time">2024-01-03</span>
                         </div><br>
                         <div class="userComment">You're right...</div>                                
                      </div>
                      <div class="comment">
                         <div class="user">Cooka la Booka
-                           <img class="user-img" src="niga.jpg" align="left" alt="User Image">
+                           <img class="user-img" src="pickard.jpg" align="left" alt="User Image">
                            <span class="time">2024-01-04</span>
                         </div><br>
                         <div class="userComment">You're not right...</div>                                
                      </div>
                      <div class="comment">
                         <div class="user">Boom Shaka
-                           <img class="user-img" src="niga.jpg" align="left" alt="User Image">
+                           <img class="user-img" src="pickard.jpg" align="left" alt="User Image">
                            <span class="time">2024-01-05</span>
                         </div><br>
                         <div class="userComment">You're almost right...</div>                                
@@ -117,14 +120,14 @@ session_start();
                   <div class="replies">   
                      <div class="comment">
                         <div class="user">Mac Adam
-                           <img class="user-img" src="niga.jpg" align="left" alt="User Image">
+                           <img class="user-img" src="pickard.jpg" align="left" alt="User Image">
                            <span class="time">2024-01-03</span>
                         </div><br>
                         <div class="userComment">You're right...</div>                                
                      </div>
                      <div class="comment">
                         <div class="user">Cook a Booka
-                           <img class="user-img" src="niga.jpg" align="left" alt="User Image">
+                           <img class="user-img" src="pickard.jpg" align="left" alt="User Image">
                            <span class="time">2024-01-04</span>
                         </div><br>
                         <div class="userComment">You're not right...</div>                                
@@ -137,47 +140,28 @@ session_start();
    </div>
    <script src="http://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
    <script type="text/javascript">
       $(document).ready(function () {
          $("#addComment").on('click', function () {
-            
-         function getComments() {
-            $.ajax({
-               url: 'index.php',
-               method: 'POST',
-               dataType: 'json',
-               data: {
-                  getComment: 1,
-               }, 
-               success: function (response) {
-                  displayComments(response);
-               }
-            });
-         };
 
-         function displayComments(comments){
-            var commentsCounter = $('.userComments');
-            commentsCounter.empty();
-
-            for(var i = 0; i < comments.length; i++){
-               var commentHTML = '<div class="comment">';
-               //commentHTML += '<div class="user">' + comments[i]['username'];
-               //commentHTML += '<img class="user-img" src="' + comments[i]['user_image'] + '" align="left" alt="User Image">';
-               commentHTML += '<div class="commentID">' + comments[i]['comment_ID'];
-               commentHTML += '<span class="time">' + comments[i]['creation_datetime'] + '</span></div><br>';
-               commentHTML += '<div class="userComment">' + comments[i]['comment'] + '</div>';
-               commentHTML += '<div class="replies"></div></div>';
-
-               commentsCounter.append(commentHTML);
-            }
-         }
-         getComments();
-
-         $("#addComment").on('click', function() {
             var comment = $("#mainComment").val();
+            
+            function getComments() {
+               $.ajax({
+                  url: 'index.php',
+                  method: 'POST',
+                  dataType: 'json',
+                  data: {
+                     getComment: 1,
+                  }, 
+                  success: function (response) {
+                     displayComments(response);
+                  }
+               });
+            };
 
-            if (comment.length > 5) {
+            if (comment.length > 3) {
                $.ajax({
                   url: 'index.php',
                   method: 'POST',
@@ -188,7 +172,7 @@ session_start();
                   },
                   success: function(response){
                      if (response === 'success') {
-                        $("#mainComment").val(''); //emptying comment field
+                        $("#mainComment").val(''); 
                         getComments();
                      }
                      else {
@@ -200,8 +184,23 @@ session_start();
             else {
                alert('Please check your inputs!');
             } 
+
+            function displayComments(comments){
+               var commentsCounter = $('.userComments');
+               commentsCounter.empty();
+
+               for(var i = 0; i < comments.length; i++){
+                  var commentHTML = '<div class="comment">';
+                  //commentHTML += '<div class="user">' + comments[i]['username'];
+                  //commentHTML += '<img class="user-img" src="' + comments[i]['user_image'] + '" align="left" alt="User Image">';
+                  commentHTML += '<div class="userComment">' + comments[i]['comment'] + '</div>';
+                  commentHTML += '<div class="commentID">' + comments[i]['comment_ID'] + '&nbsp';'&nbsp';
+                  commentHTML += '<span class="time">' + comments[i]['creation_datetime'] + '</span></div><br>';      
+                  //commentHTML += '<div class="replies"></div></div>';
+                  commentsCounter.append(commentHTML);
+               }
+            }        
          });    
-      });
       });   
    </script>        
 </body>
